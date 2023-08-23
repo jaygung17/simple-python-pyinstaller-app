@@ -21,6 +21,9 @@ node{
             junit 'test-reports/results.xml'
         }
     }
+    stage('Manual Approval'){
+        input message: "Lanjutkan ke tahap Deploy?"
+    }
     try{
         stage('Deploy'){
             env.VOLUME = '$(pwd)/sources:/src'
@@ -32,6 +35,7 @@ node{
             }
             archiveArtifacts "${env.BUILD_ID}/sources/dist/add2vals"
             sh "docker run --rm -v ${VOLUME} ${IMAGE} 'rm -rf build dist'"
+	    sleep 60
     }
     catch(e){
         throw e
