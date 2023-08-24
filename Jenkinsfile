@@ -35,8 +35,8 @@ node{
         }
         def remote_server = "103.175.219.135"
         withCredentials([sshUserPrivateKey(credentialsId: 'local-vps', keyFileVariable: 'SSH_KEY', usernameVariable: 'SSH_USERNAME')]) {
-            sh "scp -o 'StrictHostKeyChecking=no'-i \${SSH_KEY} build/ ${SSH_USERNAME}@${remote_server}:pydev/"
-            sh "ssh -i 'StrictHostKeyChecking=no' \${SSH_KEY} ${SSH_USERNAME}@${remote_server} '~/pydev/add2vals 3 2'"
+            sh "scp -o \"StrictHostKeyChecking=no\"'-i \${SSH_KEY} build/ ${SSH_USERNAME}@${remote_server}:pydev/"
+            sh "ssh -i \"StrictHostKeyChecking=no\" \${SSH_KEY} ${SSH_USERNAME}@${remote_server} '~/pydev/add2vals 3 2'"
         }
             archiveArtifacts "${env.BUILD_ID}/sources/dist/add2vals"
             sh "docker run --rm -v ${VOLUME} ${IMAGE} 'rm -rf build dist'"
