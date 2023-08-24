@@ -32,7 +32,12 @@ node{
                 unstash(name: 'compiled-results')
                 sh "docker run --rm -v ${VOLUME} ${IMAGE} 'pyinstaller -F add2vals.py'"
                 }
-            }
+        }
+        def remote_server = 103.175.219.135
+        withCredentials([sshUserPrivateKey(credentialsId: 'local-vps', keyFileVariable: 'SSH_KEY', usernameVariable: 'SSH_USERNAME')]) {
+            sh "scp -i \${SSH_KEY} build/ ${SSH_USERNAME}@${remote_server}:pydev/"
+            sh "ssh -i \${SSH_KEY} ${SSH_USERNAME}@${remote_server} '~/pydev/add2vals 3 2'"
+        }
             archiveArtifacts "${env.BUILD_ID}/sources/dist/add2vals"
             sh "docker run --rm -v ${VOLUME} ${IMAGE} 'rm -rf build dist'"
 	    sleep 60
